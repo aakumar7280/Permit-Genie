@@ -47,6 +47,13 @@ const Header = ({ showAuth = true }) => {
               <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-accent-400 to-electric-500 group-hover:w-full transition-all duration-300"></div>
             </Link>
             <Link 
+              to="/permits" 
+              className="relative text-gray-300 hover:text-white transition-all duration-300 py-2 px-1 group"
+            >
+              <span className="relative z-10">Find Permits</span>
+              <div className="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-accent-400 to-electric-500 group-hover:w-full transition-all duration-300"></div>
+            </Link>
+            <Link 
               to="/about" 
               className="relative text-gray-300 hover:text-white transition-all duration-300 py-2 px-1 group"
             >

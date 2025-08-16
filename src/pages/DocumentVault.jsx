@@ -117,30 +117,30 @@ const DocumentVault = () => {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case 'approved': return 'bg-green-100 text-green-800';
-      case 'current': return 'bg-blue-100 text-blue-800';
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'submitted': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'approved': return 'bg-green-900/50 text-green-300 border border-green-700/50';
+      case 'current': return 'bg-blue-900/50 text-blue-300 border border-blue-700/50';
+      case 'pending': return 'bg-yellow-900/50 text-yellow-300 border border-yellow-700/50';
+      case 'submitted': return 'bg-purple-900/50 text-purple-300 border border-purple-700/50';
+      default: return 'bg-gray-700/50 text-gray-300 border border-gray-600/50';
     }
   };
 
   const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-slate-900">
       <Sidebar />
       
       <div className="flex-1 p-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Document Vault</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-white mb-2">Document Vault</h1>
+          <p className="text-gray-400">
             Securely store and organize all your project documents
           </p>
         </div>
 
         {/* Search and Controls */}
-        <div className="card p-6 mb-6">
+        <div className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6 mb-6 shadow-modern">
           <div className="flex flex-col lg:flex-row gap-4 items-center justify-between">
             <div className="flex-1 max-w-md">
               <div className="relative">
@@ -149,7 +149,7 @@ const DocumentVault = () => {
                   placeholder="Search documents..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                  className="w-full pl-10 pr-4 py-2 bg-gray-700/50 border border-gray-600/50 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-accent-500 focus:border-transparent transition-all"
                 />
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <svg className="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -165,8 +165,8 @@ const DocumentVault = () => {
                   onClick={() => setViewMode('grid')}
                   className={`p-2 rounded-lg transition-colors ${
                     viewMode === 'grid' 
-                      ? 'bg-purple-100 text-purple-700' 
-                      : 'text-gray-400 hover:text-gray-600'
+                      ? 'bg-accent-500/20 text-accent-400' 
+                      : 'text-gray-400 hover:text-gray-300'
                   }`}
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -177,8 +177,8 @@ const DocumentVault = () => {
                   onClick={() => setViewMode('list')}
                   className={`p-2 rounded-lg transition-colors ${
                     viewMode === 'list' 
-                      ? 'bg-purple-100 text-purple-700' 
-                      : 'text-gray-400 hover:text-gray-600'
+                      ? 'bg-accent-500/20 text-accent-400'
+                      : 'text-gray-400 hover:text-gray-300'
                   }`}
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -187,7 +187,7 @@ const DocumentVault = () => {
                 </button>
               </div>
               
-              <button className="btn-gradient-blue px-4 py-2 text-sm">
+              <button className="bg-gradient-to-r from-accent-600 to-electric-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:shadow-glow transition-all duration-300">
                 Upload Document
               </button>
             </div>
@@ -202,8 +202,8 @@ const DocumentVault = () => {
               onClick={() => setSelectedCategory(category.id)}
               className={`flex items-center px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                 selectedCategory === category.id
-                  ? `bg-gradient-to-r ${category.gradient} text-white`
-                  : 'bg-white text-gray-700 border border-gray-300 hover:border-gray-400'
+                  ? `bg-gradient-to-r from-accent-600 to-electric-600 text-white shadow-glow`
+                  : 'bg-gray-800/50 text-gray-300 border border-gray-600/50 hover:border-gray-500/50 hover:bg-gray-700/50'
               }`}
             >
               <span className="mr-2">{category.icon}</span>
@@ -217,22 +217,22 @@ const DocumentVault = () => {
           // Grid View
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredDocuments.map((doc) => (
-              <div key={doc.id} className="card p-4 hover:shadow-lg transition-shadow group">
+              <div key={doc.id} className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4 hover:shadow-glow transition-all duration-300 group">
                 <div className="flex items-center justify-between mb-3">
                   <div className="text-3xl">{getFileIcon(doc.type)}</div>
                   <div className="flex space-x-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button className="p-1 rounded text-gray-400 hover:text-blue-600">
+                    <button className="p-1 rounded text-gray-400 hover:text-accent-400 transition-colors">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
                     </button>
-                    <button className="p-1 rounded text-gray-400 hover:text-green-600">
+                    <button className="p-1 rounded text-gray-400 hover:text-green-400 transition-colors">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                       </svg>
                     </button>
-                    <button className="p-1 rounded text-gray-400 hover:text-red-600">
+                    <button className="p-1 rounded text-gray-400 hover:text-red-400 transition-colors">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
@@ -240,11 +240,11 @@ const DocumentVault = () => {
                   </div>
                 </div>
                 
-                <h3 className="font-medium text-gray-900 mb-2 truncate" title={doc.name}>
+                <h3 className="font-medium text-white mb-2 truncate" title={doc.name}>
                   {doc.name}
                 </h3>
                 
-                <p className="text-sm text-gray-600 mb-2">{doc.project}</p>
+                <p className="text-sm text-gray-400 mb-2">{doc.project}</p>
                 
                 <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
                   <span>{doc.uploadDate}</span>

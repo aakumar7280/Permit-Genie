@@ -60,3 +60,20 @@ model Permit {
   
   @@map("permits")
 }
+
+// Toronto Government Permits - for search and reference
+model TorontoPermit {
+  id          Int      @id @default(autoincrement())
+  csvId       Int      // Original ID from CSV
+  name        String
+  category    String   // Business, Building, Vehicle, etc.
+  description String
+  url         String?
+  keywords    String?  // For search optimization
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([category])
+  @@index([name])
+  @@map("toronto_permits")
+}

@@ -115,5 +115,36 @@ export const authAPI = {
   }
 };
 
+// Permit Search API
+export const permitsAPI = {
+  // Search permits
+  searchPermits: async (query, limit = 5) => {
+    const params = new URLSearchParams({
+      q: query,
+      limit: limit.toString()
+    });
+    
+    return apiRequest(`/permits/search?${params}`);
+  },
+
+  // Get permit by ID
+  getPermitById: async (id) => {
+    return apiRequest(`/permits/${id}`);
+  },
+
+  // Get permits by category
+  getPermitsByCategory: async (category, limit = 10) => {
+    return apiRequest(`/permits/category/${category}?limit=${limit}`);
+  },
+
+  // Get all permit categories
+  getPermitCategories: async () => {
+    return apiRequest('/permits/meta/categories');
+  }
+};
+
+// Default export for permits API
+export default permitsAPI;
+
 // Export utility functions
 export { getAuthToken, setAuthToken, removeAuthToken, getUserData, setUserData, removeUserData };

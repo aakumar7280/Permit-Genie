@@ -1,284 +1,395 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
+import { authAPI } from '../services/api';
+import { analyzeProjectForPermits } from '../services/paymentService';
 
 const NewProjectForm = () => {
   const navigate = useNavigate();
-  const [currentStep, setCurrentStep] = useState(1);
+  const [user, setUser] = useState(null);
+  
   const [formData, setFormData] = useState({
-    // Step 1
     projectName: '',
     location: '',
     workType: '',
     startDate: '',
-    // Step 2
     projectScope: '',
     budget: '',
+    description: '',
+    contactName: '',
+    contactEmail: '',
+    contactPhone: '',
   });
 
-  const workTypes = [
-    'Construction - New Building',
-    'Construction - Renovation',
-    'Construction - Demolition',
-    'Event - Outdoor Festival',
-    'Event - Corporate Gathering',
-    'Event - Wedding/Private Party',
-    'Electrical Work',
-    'Plumbing Work',
-    'HVAC Installation',
-    'Other',
-  ];
+  // Check authentication
+  useEffect(() => {
+    if (!authAPI.isAuthenticated()) {
+      navigate('/login');
+      return;
+    }
+
+    const userData = authAPI.getCurrentUser();
+    if (userData) {
+      setUser(userData);
+      // Auto-fill contact information from user profile
+      setFormData(prev => ({
+        ...prev,
+        contactName: `${userData.firstName} ${userData.lastName}`,
+        contactEmail: userData.email,
+      }));
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    console.log('🔥 NewProjectForm handleChange:', e.target.name, '=', e.target.value);
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
   };
 
-  const nextStep = () => {
-    setCurrentStep(currentStep + 1);
-  };
-
-  const prevStep = () => {
-    setCurrentStep(currentStep - 1);
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, you'd make an API call here
-    console.log('Project data:', formData);
+    console.log('Form submitted:', formData);
     
-    // Redirect to project details for demo purposes
-    navigate('/project/new');
+    try {
+      // Create project with analysis
+      const project = {
+        id: Date.now(),
+        ...formData,
+        status: 'Planning',
+        createdAt: new Date().toISOString(),
+      };
+
+      // Analyze project for permits
+      const analysis = analyzeProjectForPermits(project);
+      project.analysis = analysis;
+
+      // Save to localStorage
+      const existingProjects = JSON.parse(localStorage.getItem('userProjects') || '[]');
+      const updatedProjects = [...existingProjects, project];
+      localStorage.setItem('userProjects', JSON.stringify(updatedProjects));
+
+      // Navigate to projects page
+      navigate('/projects');
+    } catch (error) {
+      console.error('Failed to create project:', error);
+    }
   };
 
-  const progressPercentage = (currentStep / 3) * 100;
+  if (!user) {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#0f172a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: 'white', fontSize: '20px' }}>Loading...</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#0f172a' }}>
       <Sidebar />
       
-      <div className="flex-1 p-8">
-        <div className="max-w-2xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+      <div style={{ flex: 1, padding: '32px' }}>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <div style={{ marginBottom: '32px' }}>
+            <h1 style={{ fontSize: '36px', fontWeight: 'bold', color: 'white', marginBottom: '16px' }}>
               Create New Project
             </h1>
-            <p className="text-gray-600">
-              Let's gather some information about your project to find the right permits.
+            <p style={{ color: '#9ca3af' }}>
+              Let's set up your construction project and identify the permits you'll need.
             </p>
           </div>
-          
-          {/* Progress Bar */}
-          <div className="mb-8">
-            <div className="flex items-center justify-between text-sm font-medium text-gray-500 mb-2">
-              <span>Step {currentStep} of 3</span>
-              <span>{Math.round(progressPercentage)}% Complete</span>
-            </div>
-            <div className="w-full bg-gray-200 rounded-full h-3">
-              <div 
-                className="h-3 bg-gradient-to-r from-slate-500 via-slate-600 to-slate-700 rounded-full transition-all duration-300"
-                style={{ width: `${progressPercentage}%` }}
-              ></div>
-            </div>
-          </div>
-          
-          <div className="card p-8">
-            <form onSubmit={handleSubmit}>
-              {/* Step 1: Basic Information */}
-              {currentStep === 1 && (
-                <div className="space-y-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                    Basic Project Information
-                  </h2>
-                  
-                  <div>
-                    <label htmlFor="projectName" className="block text-sm font-medium text-gray-700 mb-2">
-                      Project Name *
-                    </label>
-                    <input
-                      id="projectName"
-                      name="projectName"
-                      type="text"
-                      required
-                      value={formData.projectName}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
-                      placeholder="e.g., Downtown Restaurant Renovation"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="location" className="block text-sm font-medium text-gray-700 mb-2">
-                      Project Location *
-                    </label>
-                    <input
-                      id="location"
-                      name="location"
-                      type="text"
-                      required
-                      value={formData.location}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
-                      placeholder="e.g., 123 Main St, San Francisco, CA"
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="workType" className="block text-sm font-medium text-gray-700 mb-2">
-                      Type of Work *
-                    </label>
-                    <select
-                      id="workType"
-                      name="workType"
-                      required
-                      value={formData.workType}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
-                    >
-                      <option value="">Select work type</option>
-                      {workTypes.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="startDate" className="block text-sm font-medium text-gray-700 mb-2">
-                      Planned Start Date *
-                    </label>
-                    <input
-                      id="startDate"
-                      name="startDate"
-                      type="date"
-                      required
-                      value={formData.startDate}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
-                    />
-                  </div>
+
+          <form onSubmit={handleSubmit}>
+            <div style={{
+              backgroundColor: '#374151',
+              padding: '32px',
+              borderRadius: '12px',
+              marginBottom: '24px'
+            }}>
+              <h2 style={{ color: 'white', fontSize: '24px', marginBottom: '24px' }}>
+                Project Information
+              </h2>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    color: 'white', 
+                    marginBottom: '8px',
+                    fontSize: '16px',
+                    fontWeight: '500'
+                  }}>
+                    Project Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="projectName"
+                    value={formData.projectName}
+                    onChange={handleChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '12px 16px',
+                      fontSize: '16px',
+                      border: '2px solid #6b7280',
+                      borderRadius: '8px',
+                      backgroundColor: 'white',
+                      color: 'black',
+                      outline: 'none'
+                    }}
+                    placeholder="Enter project name"
+                  />
                 </div>
-              )}
-              
-              {/* Step 2: Project Details */}
-              {currentStep === 2 && (
-                <div className="space-y-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                    Project Details
-                  </h2>
-                  
-                  <div>
-                    <label htmlFor="projectScope" className="block text-sm font-medium text-gray-700 mb-2">
-                      Project Scope Description *
-                    </label>
-                    <textarea
-                      id="projectScope"
-                      name="projectScope"
-                      rows={6}
-                      required
-                      value={formData.projectScope}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
-                      placeholder="Provide detailed description of the work to be performed..."
-                    />
-                  </div>
-                  
-                  <div>
-                    <label htmlFor="budget" className="block text-sm font-medium text-gray-700 mb-2">
-                      Estimated Budget
-                    </label>
-                    <input
-                      id="budget"
-                      name="budget"
-                      type="number"
-                      value={formData.budget}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
-                      placeholder="Enter budget amount"
-                    />
-                  </div>
+
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    color: 'white', 
+                    marginBottom: '8px',
+                    fontSize: '16px',
+                    fontWeight: '500'
+                  }}>
+                    Location *
+                  </label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={formData.location}
+                    onChange={handleChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '12px 16px',
+                      fontSize: '16px',
+                      border: '2px solid #6b7280',
+                      borderRadius: '8px',
+                      backgroundColor: 'white',
+                      color: 'black',
+                      outline: 'none'
+                    }}
+                    placeholder="City, Province/State"
+                  />
                 </div>
-              )}
-              
-              {/* Step 3: Review */}
-              {currentStep === 3 && (
-                <div className="space-y-6">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-6">
-                    Review & Submit
-                  </h2>
-                  
-                  <div className="bg-gray-50 p-6 rounded-lg space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <h3 className="font-medium text-gray-900">Project Name</h3>
-                        <p className="text-gray-600">{formData.projectName}</p>
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-gray-900">Location</h3>
-                        <p className="text-gray-600">{formData.location}</p>
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-gray-900">Work Type</h3>
-                        <p className="text-gray-600">{formData.workType}</p>
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-gray-900">Start Date</h3>
-                        <p className="text-gray-600">{formData.startDate}</p>
-                      </div>
-                    </div>
-                    
-                    <div>
-                      <h3 className="font-medium text-gray-900">Project Scope</h3>
-                      <p className="text-gray-600">{formData.projectScope}</p>
-                    </div>
-                    
-                    {formData.budget && (
-                      <div>
-                        <h3 className="font-medium text-gray-900">Budget</h3>
-                        <p className="text-gray-600">${Number(formData.budget).toLocaleString()}</p>
-                      </div>
-                    )}
-                  </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px' }}>
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    color: 'white', 
+                    marginBottom: '8px',
+                    fontSize: '16px',
+                    fontWeight: '500'
+                  }}>
+                    Work Type *
+                  </label>
+                  <select
+                    name="workType"
+                    value={formData.workType}
+                    onChange={handleChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '12px 16px',
+                      fontSize: '16px',
+                      border: '2px solid #6b7280',
+                      borderRadius: '8px',
+                      backgroundColor: 'white',
+                      color: 'black',
+                      outline: 'none'
+                    }}
+                  >
+                    <option value="">Select work type</option>
+                    <option value="renovation">Renovation</option>
+                    <option value="new-construction">New Construction</option>
+                    <option value="addition">Addition</option>
+                    <option value="demolition">Demolition</option>
+                    <option value="commercial">Commercial</option>
+                    <option value="other">Other</option>
+                  </select>
                 </div>
-              )}
-              
-              {/* Navigation Buttons */}
-              <div className="flex justify-between mt-8">
-                <button
-                  type="button"
-                  onClick={prevStep}
-                  className={`px-6 py-3 border border-gray-300 rounded-lg font-medium transition-colors ${
-                    currentStep === 1 
-                      ? 'text-gray-400 cursor-not-allowed' 
-                      : 'text-gray-700 hover:bg-gray-50'
-                  }`}
-                  disabled={currentStep === 1}
+
+                <div>
+                  <label style={{ 
+                    display: 'block', 
+                    color: 'white', 
+                    marginBottom: '8px',
+                    fontSize: '16px',
+                    fontWeight: '500'
+                  }}>
+                    Start Date
+                  </label>
+                  <input
+                    type="date"
+                    name="startDate"
+                    value={formData.startDate}
+                    onChange={handleChange}
+                    style={{
+                      width: '100%',
+                      padding: '12px 16px',
+                      fontSize: '16px',
+                      border: '2px solid #6b7280',
+                      borderRadius: '8px',
+                      backgroundColor: 'white',
+                      color: 'black',
+                      outline: 'none'
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ 
+                  display: 'block', 
+                  color: 'white', 
+                  marginBottom: '8px',
+                  fontSize: '16px',
+                  fontWeight: '500'
+                }}>
+                  Project Scope *
+                </label>
+                <input
+                  type="text"
+                  name="projectScope"
+                  value={formData.projectScope}
+                  onChange={handleChange}
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    fontSize: '16px',
+                    border: '2px solid #6b7280',
+                    borderRadius: '8px',
+                    backgroundColor: 'white',
+                    color: 'black',
+                    outline: 'none'
+                  }}
+                  placeholder="e.g., Kitchen renovation, Bathroom addition, etc."
+                />
+              </div>
+
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ 
+                  display: 'block', 
+                  color: 'white', 
+                  marginBottom: '8px',
+                  fontSize: '16px',
+                  fontWeight: '500'
+                }}>
+                  Budget
+                </label>
+                <select
+                  name="budget"
+                  value={formData.budget}
+                  onChange={handleChange}
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    fontSize: '16px',
+                    border: '2px solid #6b7280',
+                    borderRadius: '8px',
+                    backgroundColor: 'white',
+                    color: 'black',
+                    outline: 'none'
+                  }}
                 >
-                  Previous
+                  <option value="">Select budget range</option>
+                  <option value="under-10k">Under $10,000</option>
+                  <option value="10k-25k">$10,000 - $25,000</option>
+                  <option value="25k-50k">$25,000 - $50,000</option>
+                  <option value="50k-100k">$50,000 - $100,000</option>
+                  <option value="over-100k">Over $100,000</option>
+                </select>
+              </div>
+
+              <div style={{ marginBottom: '24px' }}>
+                <label style={{ 
+                  display: 'block', 
+                  color: 'white', 
+                  marginBottom: '8px',
+                  fontSize: '16px',
+                  fontWeight: '500'
+                }}>
+                  Project Description *
+                </label>
+                <textarea
+                  name="description"
+                  value={formData.description}
+                  onChange={handleChange}
+                  required
+                  rows={4}
+                  style={{
+                    width: '100%',
+                    padding: '12px 16px',
+                    fontSize: '16px',
+                    border: '2px solid #6b7280',
+                    borderRadius: '8px',
+                    backgroundColor: 'white',
+                    color: 'black',
+                    outline: 'none',
+                    resize: 'vertical'
+                  }}
+                  placeholder="Describe what work will be done, materials used, areas affected, etc. Be as detailed as possible to get accurate permit recommendations."
+                />
+              </div>
+
+              {/* Debug Display */}
+              <div style={{ 
+                backgroundColor: '#1f2937',
+                padding: '16px',
+                borderRadius: '8px',
+                marginBottom: '24px'
+              }}>
+                <h3 style={{ color: 'white', marginBottom: '12px', fontSize: '18px' }}>
+                  Form Data (Debug):
+                </h3>
+                <div style={{ color: '#10b981', fontSize: '14px', fontFamily: 'monospace' }}>
+                  <div>Project Name: "{formData.projectName}"</div>
+                  <div>Location: "{formData.location}"</div>
+                  <div>Work Type: "{formData.workType}"</div>
+                  <div>Project Scope: "{formData.projectScope}"</div>
+                  <div>Description length: {formData.description.length}</div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '16px' }}>
+                <button
+                  type="submit"
+                  disabled={!formData.projectName || !formData.location || !formData.workType || !formData.projectScope || !formData.description}
+                  style={{
+                    padding: '12px 24px',
+                    backgroundColor: !formData.projectName || !formData.location || !formData.workType || !formData.projectScope || !formData.description ? '#6b7280' : '#3b82f6',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    fontWeight: '500',
+                    cursor: !formData.projectName || !formData.location || !formData.workType || !formData.projectScope || !formData.description ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  Create Project
                 </button>
                 
-                {currentStep < 3 ? (
-                  <button
-                    type="button"
-                    onClick={nextStep}
-                    className="btn-gradient-emerald px-8 py-3"
-                  >
-                    Next Step
-                  </button>
-                ) : (
-                  <button
-                    type="submit"
-                    className="btn-gradient-emerald px-8 py-3"
-                  >
-                    Create Project
-                  </button>
-                )}
+                <button
+                  type="button"
+                  onClick={() => navigate('/projects')}
+                  style={{
+                    padding: '12px 24px',
+                    backgroundColor: '#6b7280',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '16px',
+                    fontWeight: '500',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

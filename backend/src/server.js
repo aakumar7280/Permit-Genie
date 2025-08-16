@@ -6,6 +6,7 @@ require('dotenv').config();
 
 // Import routes
 const authRoutes = require('./routes/auth');
+const permitRoutes = require('./routes/permits');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -31,6 +32,7 @@ app.get('/health', (req, res) => {
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/permits', permitRoutes);
 
 // API info endpoint
 app.get('/api', (req, res) => {
@@ -45,8 +47,14 @@ app.get('/api', (req, res) => {
         profile: 'GET /api/auth/profile (requires auth)',
         test: 'GET /api/auth/test (requires auth)'
       },
+      permits: {
+        search: 'GET /api/permits/search?q=query&limit=5',
+        byId: 'GET /api/permits/:id',
+        byCategory: 'GET /api/permits/category/:category',
+        categories: 'GET /api/permits/meta/categories',
+        import: 'POST /api/permits/import'
+      },
       projects: '/api/projects/* (coming soon)',
-      permits: '/api/permits/* (coming soon)',
       documents: '/api/documents/* (coming soon)'
     }
   });

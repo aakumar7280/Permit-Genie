@@ -51,7 +51,7 @@ const register = async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Create new user
+    // Create new user with payment tier info
     const newUser = {
       id: users.length + 1,
       firstName: first,
@@ -60,7 +60,11 @@ const register = async (req, res) => {
       password: hashedPassword,
       phoneNumber: phoneNumber || '',
       companyName: companyName || '',
-      createdAt: new Date().toISOString()
+      createdAt: new Date().toISOString(),
+      subscriptionTier: 'free', // free, premium
+      freePermitApplicationsUsed: 0,
+      totalPermitApplicationsUsed: 0,
+      maxFreeApplications: 1
     };
 
     users.push(newUser);
