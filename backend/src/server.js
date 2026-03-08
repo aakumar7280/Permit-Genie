@@ -39,10 +39,13 @@ app.use(express.urlencoded({ extended: true }));
 
 // Health check endpoint
 app.get('/health', (req, res) => {
+  const geminiKey = process.env.GEMINI_API_KEY;
   res.status(200).json({ 
     status: 'OK', 
     message: 'Permit Genie Backend Server is running!',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    geminiConfigured: !!geminiKey,
+    geminiKeyPrefix: geminiKey ? geminiKey.substring(0, 8) + '...' : 'NOT SET',
   });
 });
 
