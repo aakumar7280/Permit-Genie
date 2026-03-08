@@ -2,6 +2,17 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
+const inputStyle = {
+  backgroundColor: '#2d2d2d',
+  border: '1px solid #444',
+  color: '#FFFFFF',
+};
+
+const inputFocusHandlers = {
+  onFocus: (e) => { e.target.style.borderColor = '#F15025'; e.target.style.boxShadow = '0 0 0 2px rgba(241,80,37,0.2)'; },
+  onBlur: (e) => { e.target.style.borderColor = '#444'; e.target.style.boxShadow = 'none'; },
+};
+
 const ContactPage = () => {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -27,13 +38,11 @@ const ContactPage = () => {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // Simulate API call
     await new Promise(resolve => setTimeout(resolve, 2000));
     
     console.log('Contact form submitted:', formData);
     alert('Thank you for your message! We\'ll get back to you within 24 hours.');
     
-    // Reset form
     setFormData({
       firstName: '',
       lastName: '',
@@ -49,64 +58,40 @@ const ContactPage = () => {
   };
 
   const contactInfo = [
-    {
-      icon: '📧',
-      title: 'Email',
-      detail: 'support@permitgenie.com',
-      description: 'Send us an email anytime',
-      gradient: 'from-slate-500 to-slate-600'
-    },
-    {
-      icon: '📞',
-      title: 'Phone',
-      detail: '+1 (555) 123-4567',
-      description: 'Mon-Fri from 8am to 6pm PST',
-      gradient: 'from-slate-500 to-slate-600'
-    },
-    {
-      icon: '📍',
-      title: 'Office',
-      detail: '123 Business Blvd, Suite 100',
-      description: 'San Francisco, CA 94105',
-      gradient: 'from-slate-500 to-slate-600'
-    },
-    {
-      icon: '💬',
-      title: 'Live Chat',
-      detail: 'Available 24/7',
-      description: 'Get instant help on our website',
-      gradient: 'from-slate-500 to-slate-600'
-    },
+    { icon: '📧', title: 'Email', detail: 'support@permitgenie.com', description: 'Send us an email anytime' },
+    { icon: '📞', title: 'Phone', detail: '+1 (555) 123-4567', description: 'Mon-Fri from 8am to 6pm PST' },
+    { icon: '📍', title: 'Office', detail: '123 Business Blvd, Suite 100', description: 'San Francisco, CA 94105' },
+    { icon: '💬', title: 'Live Chat', detail: 'Available 24/7', description: 'Get instant help on our website' },
   ];
 
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen" style={{ backgroundColor: '#191919' }}>
       <Header />
       
       {/* Hero Section */}
       <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            Get in <span className="bg-gradient-to-r from-slate-400 via-slate-500 to-slate-600 bg-clip-text text-transparent">Touch</span>
+            Get in <span style={{ color: '#F15025' }}>Touch</span>
           </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl max-w-3xl mx-auto" style={{ color: '#CED0CE' }}>
             Have questions about permits? Need help with your project? We're here to help you succeed.
           </p>
         </div>
       </section>
       
       {/* Contact Info Cards */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-800">
+      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#222222' }}>
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
             {contactInfo.map((info, index) => (
-              <div key={index} className="card p-6 text-center hover:shadow-lg transition-shadow">
-                <div className={`w-16 h-16 mx-auto mb-4 bg-gradient-to-br ${info.gradient} rounded-full flex items-center justify-center`}>
+              <div key={index} className="rounded-2xl p-6 text-center transition-shadow" style={{ backgroundColor: '#2d2d2d', border: '1px solid #444' }}>
+                <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F15025' }}>
                   <span className="text-2xl text-white">{info.icon}</span>
                 </div>
                 <h3 className="text-lg font-semibold text-white mb-2">{info.title}</h3>
-                <p className="font-medium text-gray-300 mb-1">{info.detail}</p>
-                <p className="text-sm text-gray-400">{info.description}</p>
+                <p className="font-medium mb-1" style={{ color: '#E6E8E6' }}>{info.detail}</p>
+                <p className="text-sm" style={{ color: '#CED0CE' }}>{info.description}</p>
               </div>
             ))}
           </div>
@@ -120,17 +105,17 @@ const ContactPage = () => {
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Send Us a Message
             </h2>
-            <p className="text-lg text-gray-300">
+            <p className="text-lg" style={{ color: '#CED0CE' }}>
               Fill out the form below and we'll get back to you as soon as possible.
             </p>
           </div>
           
-          <div className="card p-8 md:p-12">
+          <div className="rounded-2xl p-8 md:p-12" style={{ backgroundColor: '#222222', border: '1px solid #333' }}>
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Fields */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="firstName" className="block text-sm font-medium mb-2" style={{ color: '#E6E8E6' }}>
                     First Name *
                   </label>
                   <input
@@ -140,13 +125,15 @@ const ContactPage = () => {
                     required
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-3 rounded-lg transition-colors"
+                    style={inputStyle}
                     placeholder="Enter your first name"
+                    {...inputFocusHandlers}
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="lastName" className="block text-sm font-medium mb-2" style={{ color: '#E6E8E6' }}>
                     Last Name *
                   </label>
                   <input
@@ -156,8 +143,10 @@ const ContactPage = () => {
                     required
                     value={formData.lastName}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-3 rounded-lg transition-colors"
+                    style={inputStyle}
                     placeholder="Enter your last name"
+                    {...inputFocusHandlers}
                   />
                 </div>
               </div>
@@ -165,7 +154,7 @@ const ContactPage = () => {
               {/* Contact Fields */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium mb-2" style={{ color: '#E6E8E6' }}>
                     Email Address *
                   </label>
                   <input
@@ -175,13 +164,15 @@ const ContactPage = () => {
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-3 rounded-lg transition-colors"
+                    style={inputStyle}
                     placeholder="Enter your email"
+                    {...inputFocusHandlers}
                   />
                 </div>
                 
                 <div>
-                  <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="phone" className="block text-sm font-medium mb-2" style={{ color: '#E6E8E6' }}>
                     Phone Number
                   </label>
                   <input
@@ -190,8 +181,10 @@ const ContactPage = () => {
                     type="tel"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-3 rounded-lg transition-colors"
+                    style={inputStyle}
                     placeholder="Enter your phone number"
+                    {...inputFocusHandlers}
                   />
                 </div>
               </div>
@@ -199,7 +192,7 @@ const ContactPage = () => {
               {/* Company & Subject */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label htmlFor="company" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="company" className="block text-sm font-medium mb-2" style={{ color: '#E6E8E6' }}>
                     Company Name
                   </label>
                   <input
@@ -208,13 +201,15 @@ const ContactPage = () => {
                     type="text"
                     value={formData.company}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-3 rounded-lg transition-colors"
+                    style={inputStyle}
                     placeholder="Enter your company name"
+                    {...inputFocusHandlers}
                   />
                 </div>
                 
                 <div>
-                                    <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
+                  <label htmlFor="subject" className="block text-sm font-medium mb-2" style={{ color: '#E6E8E6' }}>
                     Subject *
                   </label>
                   <input
@@ -224,59 +219,40 @@ const ContactPage = () => {
                     required
                     value={formData.subject}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                    className="w-full px-4 py-3 rounded-lg transition-colors"
+                    style={inputStyle}
                     placeholder="What can we help you with?"
+                    {...inputFocusHandlers}
                   />
                 </div>
               </div>
               
               {/* Preferred Contact Method */}
               <div>
-                                <label className="block text-sm font-medium text-gray-300 mb-3">
+                <label className="block text-sm font-medium mb-3" style={{ color: '#E6E8E6' }}>
                   Preferred Contact Method *
                 </label>
                 <div className="flex space-x-6">
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="contactMethod"
-                      value="email"
-                      checked={formData.contactMethod === 'email'}
-                      onChange={handleChange}
-                      className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-600"
-                    />
-                    <span className="ml-2 text-sm text-gray-300">Email</span>
-                  </label>
-                  
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="contactMethod"
-                      value="phone"
-                      checked={formData.contactMethod === 'phone'}
-                      onChange={handleChange}
-                      className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-600"
-                    />
-                    <span className="ml-2 text-sm text-gray-300">Phone</span>
-                  </label>
-                  
-                  <label className="flex items-center">
-                    <input
-                      type="radio"
-                      name="contactMethod"
-                      value="either"
-                      checked={formData.contactMethod === 'either'}
-                      onChange={handleChange}
-                      className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-slate-600"
-                    />
-                    <span className="ml-2 text-sm text-gray-300">Either</span>
-                  </label>
+                  {['email', 'phone', 'either'].map((method) => (
+                    <label key={method} className="flex items-center cursor-pointer">
+                      <input
+                        type="radio"
+                        name="contactMethod"
+                        value={method}
+                        checked={formData.contactMethod === method}
+                        onChange={handleChange}
+                        className="h-4 w-4"
+                        style={{ accentColor: '#F15025' }}
+                      />
+                      <span className="ml-2 text-sm capitalize" style={{ color: '#CED0CE' }}>{method}</span>
+                    </label>
+                  ))}
                 </div>
               </div>
               
               {/* Message */}
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-300 mb-2">
+                <label htmlFor="message" className="block text-sm font-medium mb-2" style={{ color: '#E6E8E6' }}>
                   Message *
                 </label>
                 <textarea
@@ -286,8 +262,10 @@ const ContactPage = () => {
                   required
                   value={formData.message}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors"
+                  className="w-full px-4 py-3 rounded-lg transition-colors"
+                  style={inputStyle}
                   placeholder="Tell us about your project and how we can help..."
+                  {...inputFocusHandlers}
                 />
               </div>
               
@@ -296,11 +274,11 @@ const ContactPage = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className={`px-12 py-4 rounded-lg font-medium text-lg transition-all duration-200 ${
-                    isSubmitting
-                      ? 'bg-gray-400 cursor-not-allowed'
-                      : 'bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 hover:from-slate-700 hover:via-slate-800 hover:to-slate-900 shadow-lg hover:shadow-xl hover:scale-105'
-                  } text-white`}
+                  className="px-12 py-4 rounded-lg font-medium text-lg transition-all duration-200 text-white hover:opacity-90"
+                  style={{
+                    backgroundColor: isSubmitting ? '#6b7280' : '#F15025',
+                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
+                  }}
                 >
                   {isSubmitting ? (
                     <span className="flex items-center justify-center">
@@ -321,31 +299,31 @@ const ContactPage = () => {
       </section>
       
       {/* FAQ Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-800">
+      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#222222' }}>
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Frequently Asked Questions
             </h2>
-            <p className="text-lg text-gray-300">
+            <p className="text-lg" style={{ color: '#CED0CE' }}>
               Quick answers to common questions about Permit Genie
             </p>
           </div>
           
           <div className="space-y-6">
-            <div className="card p-6">
+            <div className="rounded-2xl p-6" style={{ backgroundColor: '#2d2d2d', border: '1px solid #444' }}>
               <h3 className="text-lg font-semibold text-white mb-3">How quickly can I get permit information?</h3>
-              <p className="text-gray-300">Most permit requirements are available instantly. Our system analyzes your project details and location to provide comprehensive permit lists in seconds.</p>
+              <p style={{ color: '#CED0CE' }}>Most permit requirements are available instantly. Our system analyzes your project details and location to provide comprehensive permit lists in seconds.</p>
             </div>
             
-            <div className="card p-6">
+            <div className="rounded-2xl p-6" style={{ backgroundColor: '#2d2d2d', border: '1px solid #444' }}>
               <h3 className="text-lg font-semibold text-white mb-3">Do you support permits nationwide?</h3>
-              <p className="text-gray-300">Yes! We have permit databases for all 50 states and thousands of local jurisdictions. Our coverage is continuously expanding.</p>
+              <p style={{ color: '#CED0CE' }}>Yes! We have permit databases for all 50 states and thousands of local jurisdictions. Our coverage is continuously expanding.</p>
             </div>
             
-            <div className="card p-6">
+            <div className="rounded-2xl p-6" style={{ backgroundColor: '#2d2d2d', border: '1px solid #444' }}>
               <h3 className="text-lg font-semibold text-white mb-3">Can I get help with permit applications?</h3>
-              <p className="text-gray-300">Absolutely! Our expert support team can guide you through the application process, review your documents, and ensure everything is submitted correctly.</p>
+              <p style={{ color: '#CED0CE' }}>Absolutely! Our expert support team can guide you through the application process, review your documents, and ensure everything is submitted correctly.</p>
             </div>
           </div>
         </div>

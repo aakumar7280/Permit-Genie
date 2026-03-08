@@ -33,8 +33,8 @@ const LoginPage = () => {
 
       console.log('Login successful:', response);
       
-      // Redirect to dashboard with real user data
-      navigate('/dashboard');
+      // Redirect to search (main app)
+      navigate('/search');
       
     } catch (error) {
       console.error('Login failed:', error);

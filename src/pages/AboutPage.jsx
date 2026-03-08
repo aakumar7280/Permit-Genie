@@ -4,16 +4,16 @@ import Footer from '../components/Footer';
 
 const AboutPage = () => {
   return (
-    <div className="min-h-screen bg-slate-900">
+    <div className="min-h-screen" style={{ backgroundColor: '#191919' }}>
       <Header />
       
       {/* Hero Section */}
       <section className="pt-20 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl md:text-5xl font-bold text-white mb-6">
-            About <span className="bg-gradient-to-r from-slate-400 via-slate-500 to-slate-600 bg-clip-text text-transparent">Permit Genie</span>
+            About <span style={{ color: '#F15025' }}>Permit Genie</span>
           </h1>
-          <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+          <p className="text-xl max-w-3xl mx-auto" style={{ color: '#CED0CE' }}>
             Born from frustration, built with determination.
           </p>
         </div>
@@ -22,10 +22,10 @@ const AboutPage = () => {
       {/* Story Section */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
-          <div className="card p-8 md:p-12">
+          <div className="rounded-2xl p-8 md:p-12" style={{ backgroundColor: '#222222', border: '1px solid #333' }}>
             <div className="flex flex-col md:flex-row items-center gap-12">
               <div className="md:w-1/3">
-                <div className="w-32 h-32 mx-auto bg-gradient-to-br from-slate-500 to-slate-600 rounded-full flex items-center justify-center">
+                <div className="w-32 h-32 mx-auto rounded-full flex items-center justify-center" style={{ backgroundColor: '#F15025' }}>
                   <span className="text-white text-4xl">👨‍💼</span>
                 </div>
               </div>
@@ -34,7 +34,7 @@ const AboutPage = () => {
                 <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
                   My Story
                 </h2>
-                <div className="space-y-4 text-gray-300 leading-relaxed">
+                <div className="space-y-4 leading-relaxed" style={{ color: '#CED0CE' }}>
                   <p>
                     I was absolutely fed up with the nightmare of finding and managing permits for my business. 
                     Every project meant hours of research, countless phone calls to different departments, and 
@@ -63,44 +63,44 @@ const AboutPage = () => {
       </section>
       
       {/* Mission Section */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 bg-slate-800">
+      <section className="py-16 px-4 sm:px-6 lg:px-8" style={{ backgroundColor: '#222222' }}>
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Our Mission
             </h2>
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl max-w-2xl mx-auto" style={{ color: '#CED0CE' }}>
               To simplify permit management for every business owner and contractor
             </p>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="card p-6 text-center border-t-4 border-transparent bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-slate-500 to-slate-600 rounded-full flex items-center justify-center">
+            <div className="rounded-2xl p-6 text-center" style={{ backgroundColor: '#2d2d2d', border: '1px solid #444', borderTop: '4px solid #F15025' }}>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F15025' }}>
                 <span className="text-2xl text-white">🎯</span>
               </div>
               <h3 className="text-xl font-semibold text-white mb-3">Simplify</h3>
-              <p className="text-white/90">
+              <p style={{ color: '#CED0CE' }}>
                 Make permit discovery and application as simple as a few clicks
               </p>
             </div>
             
-            <div className="card p-6 text-center border-t-4 border-transparent bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-slate-500 to-slate-600 rounded-full flex items-center justify-center">
+            <div className="rounded-2xl p-6 text-center" style={{ backgroundColor: '#2d2d2d', border: '1px solid #444', borderTop: '4px solid #F15025' }}>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F15025' }}>
                 <span className="text-2xl text-white">⚡</span>
               </div>
               <h3 className="text-xl font-semibold text-white mb-3">Accelerate</h3>
-              <p className="text-white/90">
+              <p style={{ color: '#CED0CE' }}>
                 Reduce permit processing time from weeks to days
               </p>
             </div>
             
-            <div className="card p-6 text-center border-t-4 border-transparent bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800">
-              <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-slate-500 to-slate-600 rounded-full flex items-center justify-center">
+            <div className="rounded-2xl p-6 text-center" style={{ backgroundColor: '#2d2d2d', border: '1px solid #444', borderTop: '4px solid #F15025' }}>
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F15025' }}>
                 <span className="text-2xl text-white">🛡️</span>
               </div>
               <h3 className="text-xl font-semibold text-white mb-3">Protect</h3>
-              <p className="text-white/90">
+              <p style={{ color: '#CED0CE' }}>
                 Ensure compliance and avoid costly project delays
               </p>
             </div>
@@ -114,26 +114,28 @@ const AboutPage = () => {
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-8">
             Built by People Who Understand
           </h2>
-          <p className="text-lg text-gray-300 mb-12 max-w-2xl mx-auto">
+          <p className="text-lg mb-12 max-w-2xl mx-auto" style={{ color: '#CED0CE' }}>
             Our team combines decades of construction industry experience with cutting-edge technology 
             to deliver solutions that actually work in the real world.
           </p>
           
-          <div className="bg-gradient-to-r from-slate-600 via-slate-700 to-slate-800 p-8 rounded-2xl text-white">
+          <div className="p-8 rounded-2xl text-white" style={{ backgroundColor: '#2d2d2d', border: '1px solid #444' }}>
             <h3 className="text-xl font-semibold mb-4">Ready to Join Thousands of Satisfied Users?</h3>
-            <p className="mb-6 opacity-90">
+            <p className="mb-6" style={{ color: '#CED0CE' }}>
               Experience the difference that proper permit management can make for your business.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
                 href="/signup" 
-                className="bg-white text-slate-700 hover:bg-gray-100 font-medium px-8 py-3 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                className="font-medium px-8 py-3 rounded-lg transition-all duration-200 hover:opacity-90"
+                style={{ backgroundColor: '#F15025', color: '#FFFFFF' }}
               >
                 Start Free Trial
               </a>
               <a 
                 href="/contact" 
-                className="border-2 border-white text-white hover:bg-white hover:text-slate-700 font-medium px-8 py-3 rounded-lg transition-all duration-200"
+                className="font-medium px-8 py-3 rounded-lg transition-all duration-200"
+                style={{ border: '2px solid #F15025', color: '#F15025' }}
               >
                 Contact Us
               </a>

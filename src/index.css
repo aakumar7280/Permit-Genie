@@ -2,18 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Pulse animation for skeleton loaders */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
 @layer base {
   body {
     font-family: 'Inter', system-ui, sans-serif;
-    background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+    background: #191919;
     background-attachment: fixed;
-    color: #e2e8f0;
+    color: #E6E8E6;
     line-height: 1.6;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
   
   html {
-    background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+    background: #191919;
     background-attachment: fixed;
   }
   
@@ -25,11 +39,11 @@
 @layer components {
   /* Modern Gradient Text */
   .gradient-text {
-    @apply bg-gradient-to-r from-white via-accent-300 to-electric-400 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-white via-gray-300 to-accent-400 bg-clip-text text-transparent;
   }
   
   .gradient-text-accent {
-    @apply bg-gradient-to-r from-accent-400 via-electric-500 to-accent-600 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-accent-400 via-accent-500 to-accent-600 bg-clip-text text-transparent;
   }
   
   .gradient-text-subtle {
@@ -38,7 +52,7 @@
   
   /* Modern Buttons */
   .btn-primary {
-    @apply relative overflow-hidden bg-gradient-to-r from-accent-600 to-electric-600 text-white font-semibold px-8 py-4 rounded-xl shadow-modern hover:shadow-glow transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
+    @apply relative overflow-hidden bg-accent-500 text-white font-semibold px-8 py-4 rounded-xl shadow-modern hover:shadow-glow transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
   }
   
   .btn-primary::before {
@@ -50,7 +64,7 @@
   }
   
   .btn-ghost {
-    @apply relative overflow-hidden bg-transparent border-2 border-accent-500/30 text-accent-300 font-semibold px-8 py-4 rounded-xl hover:bg-accent-500/10 hover:border-accent-400/50 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
+    @apply relative overflow-hidden bg-transparent border-2 border-accent-500/30 text-accent-400 font-semibold px-8 py-4 rounded-xl hover:bg-accent-500/10 hover:border-accent-400/50 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98];
   }
   
   /* Glass Morphism Cards */
@@ -75,29 +89,35 @@
     @apply bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl shadow-inner-glow;
   }
   
-  /* Icon Gradients with Modern Feel */
+  /* Icon Gradients with Brand Colors */
   .icon-gradient-1 {
-    @apply bg-gradient-to-br from-accent-500 to-electric-600 shadow-glow;
+    background: #F15025;
+    @apply shadow-glow rounded-2xl;
   }
   
   .icon-gradient-2 {
-    @apply bg-gradient-to-br from-electric-500 to-accent-600 shadow-glow;
+    background: #191919;
+    @apply shadow-modern rounded-2xl;
   }
   
   .icon-gradient-3 {
-    @apply bg-gradient-to-br from-gray-600 to-gray-700 shadow-modern;
+    background: linear-gradient(135deg, #F15025, #191919);
+    @apply shadow-modern rounded-2xl;
   }
   
   .icon-gradient-4 {
-    @apply bg-gradient-to-br from-accent-600 to-gray-700 shadow-modern;
+    background: #222222;
+    @apply shadow-modern rounded-2xl;
   }
   
   .icon-gradient-5 {
-    @apply bg-gradient-to-br from-electric-600 to-gray-800 shadow-modern;
+    background: linear-gradient(135deg, #191919, #F15025);
+    @apply shadow-modern rounded-2xl;
   }
   
   .icon-gradient-6 {
-    @apply bg-gradient-to-br from-gray-700 to-accent-700 shadow-modern;
+    background: #2d2d2d;
+    @apply shadow-modern rounded-2xl;
   }
   
   /* Modern Input Styles */
@@ -117,8 +137,8 @@
   /* Futuristic Grid Pattern */
   .grid-pattern {
     background-image: 
-      linear-gradient(rgba(6, 182, 212, 0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(6, 182, 212, 0.1) 1px, transparent 1px);
+      linear-gradient(rgba(241, 80, 37, 0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(241, 80, 37, 0.08) 1px, transparent 1px);
     background-size: 50px 50px;
   }
   

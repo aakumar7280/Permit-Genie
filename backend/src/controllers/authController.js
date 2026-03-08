@@ -1,8 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { PrismaClient } = require('../generated/prisma');
 
-// Mock user database (in a real app, this would be replaced with a proper database)
-const users = [];
+const prisma = new PrismaClient();
 
 // JWT secret (in production, this should be in environment variables)
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-here';
@@ -39,7 +39,7 @@ const register = async (req, res) => {
     }
 
     // Check if user already exists
-    const existingUser = users.find(user => user.email === email);
+    const existingUser = await prisma.user.findUnique({ where: { email } });
     if (existingUser) {
       return res.status(400).json({
         status: 'error',
@@ -51,23 +51,17 @@ const register = async (req, res) => {
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // Create new user with payment tier info
-    const newUser = {
-      id: users.length + 1,
-      firstName: first,
-      lastName: last,
-      email,
-      password: hashedPassword,
-      phoneNumber: phoneNumber || '',
-      companyName: companyName || '',
-      createdAt: new Date().toISOString(),
-      subscriptionTier: 'free', // free, premium
-      freePermitApplicationsUsed: 0,
-      totalPermitApplicationsUsed: 0,
-      maxFreeApplications: 1
-    };
-
-    users.push(newUser);
+    // Create new user in database
+    const newUser = await prisma.user.create({
+      data: {
+        firstName: first,
+        lastName: last || '',
+        email,
+        password: hashedPassword,
+        phoneNumber: phoneNumber || null,
+        companyName: companyName || null,
+      }
+    });
 
     // Generate token
     const token = generateToken(newUser.id);
@@ -78,8 +72,8 @@ const register = async (req, res) => {
       firstName: newUser.firstName,
       lastName: newUser.lastName,
       email: newUser.email,
-      phoneNumber: newUser.phoneNumber,
-      companyName: newUser.companyName,
+      phoneNumber: newUser.phoneNumber || '',
+      companyName: newUser.companyName || '',
       createdAt: newUser.createdAt
     };
 
@@ -114,8 +108,8 @@ const login = async (req, res) => {
       });
     }
 
-    // Find user by email
-    const user = users.find(user => user.email === email);
+    // Find user by email in database
+    const user = await prisma.user.findUnique({ where: { email } });
     if (!user) {
       return res.status(401).json({
         status: 'error',
@@ -141,8 +135,8 @@ const login = async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      phoneNumber: user.phoneNumber,
-      companyName: user.companyName,
+      phoneNumber: user.phoneNumber || '',
+      companyName: user.companyName || '',
       createdAt: user.createdAt
     };
 
@@ -169,7 +163,7 @@ const getProfile = async (req, res) => {
   try {
     const userId = req.user.userId; // Set by auth middleware
 
-    const user = users.find(user => user.id === userId);
+    const user = await prisma.user.findUnique({ where: { id: userId } });
     if (!user) {
       return res.status(404).json({
         status: 'error',
@@ -183,8 +177,8 @@ const getProfile = async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      phoneNumber: user.phoneNumber,
-      companyName: user.companyName,
+      phoneNumber: user.phoneNumber || '',
+      companyName: user.companyName || '',
       createdAt: user.createdAt
     };
 

@@ -49,8 +49,8 @@ const SignupPage = () => {
 
       console.log('Registration successful:', response);
       
-      // Redirect to dashboard with real user data
-      navigate('/dashboard');
+      // Redirect to search (main app)
+      navigate('/search');
       
     } catch (error) {
       console.error('Registration failed:', error);

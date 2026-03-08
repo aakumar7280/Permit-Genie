@@ -1,0 +1,38 @@
+# Dependencies (3 copies — ~400MB total)
+node_modules/
+
+# Build output
+dist/
+
+# Environment variables (contain API keys & secrets)
+.env
+backend/.env
+web-scraping-prototype/.env
+
+# Prisma generated client (auto-generated on npm install)
+backend/src/generated/
+
+# SQLite database (local data, not needed in repo)
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+
+# macOS system files
+.DS_Store
+**/.DS_Store
+
+# IDE / Editor
+.vscode/
+
+# Temp / leftover files from development
+App_temp.jsx
+Dashboard_current.jsx
+Dashboard_temp.jsx
+UpgradePage.jsx
+IMPLEMENTATION_SUMMARY.md
+
+# Scraping prototype (not needed for the app)
+web-scraping-prototype/scraped-data/
+
+# Logs
+*.log
+npm-debug.log*

@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="relative bg-gray-900/60 backdrop-blur-xl border-t border-accent-500/20 overflow-hidden">
+    <footer className="relative overflow-hidden" style={{ backgroundColor: '#191919', borderTop: '1px solid #333' }}>
       {/* Background Pattern */}
       <div className="absolute inset-0 grid-pattern opacity-10"></div>
       
@@ -11,7 +11,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-6">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-accent-500 to-electric-600 flex items-center justify-center mr-4 shadow-glow">
+              <div className="w-12 h-12 rounded-xl flex items-center justify-center mr-4" style={{ backgroundColor: '#F15025' }}>
                 <span className="text-white font-bold text-2xl">P</span>
               </div>
               <span className="text-2xl font-bold gradient-text">Permit Genie</span>
@@ -101,7 +101,7 @@ const Footer = () => {
         </div>
         
         {/* Bottom Section */}
-        <div className="border-t border-accent-500/20 mt-12 pt-8">
+        <div className="mt-12 pt-8" style={{ borderTop: '1px solid #333' }}>
           <div className="flex flex-col md:flex-row justify-between items-center gap-6">
             <p className="text-gray-400 text-sm">
               © 2025 Permit Genie. All rights reserved. • Built with ❤️ for the future of compliance.

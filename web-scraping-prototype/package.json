@@ -1,0 +1,28 @@
+{
+  "name": "toronto-permit-scraper",
+  "version": "1.0.0",
+  "description": "Web scraping prototype for Toronto city permits",
+  "main": "scraper.js",
+  "scripts": {
+    "start": "node run-scraper.js",
+    "test": "node test-scraper.js",
+    "dev": "nodemon run-scraper.js",
+    "analyze": "node analyze-data.js",
+    "basic-test": "node basic-test.js",
+    "improved-test": "node improved-test.js",
+    "final-scraper": "node final-scraper.js"
+  },
+  "dependencies": {
+    "puppeteer": "^22.0.0",
+    "cheerio": "^1.0.0-rc.12",
+    "axios": "^1.6.0",
+    "fs-extra": "^11.2.0",
+    "dotenv": "^16.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "keywords": ["scraping", "permits", "toronto", "government"],
+  "author": "Aarush Kumar",
+  "license": "MIT"
+}

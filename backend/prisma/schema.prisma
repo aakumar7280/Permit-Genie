@@ -22,8 +22,10 @@ model User {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
-  // Relations for future features
-  projects    Project[]
+  // Relations
+  projects      Project[]
+  applications  Application[]
+  savedPermits  SavedPermit[]
   
   @@map("users")
 }
@@ -73,7 +75,91 @@ model TorontoPermit {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   
+  applications  Application[]
+  savedByUsers   SavedPermit[]
+  
   @@index([category])
   @@index([name])
   @@map("toronto_permits")
+}
+
+// User permit applications
+model Application {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  permitId        Int      // FK to TorontoPermit
+  status          String   @default("draft") // draft, submitted, in_review, approved, rejected
+  
+  // ── Step 1: Applicant Information ──
+  applicantName       String
+  applicantEmail      String
+  applicantPhone      String?
+  applicantDateOfBirth String?   // YYYY-MM-DD
+  mailingAddress      String?   // Applicant's mailing address (if different from property)
+  
+  // ── Step 2: Property / Location Details ──
+  propertyAddress     String?   // Municipal street address
+  propertyUnit        String?   // Unit / Suite number
+  propertyCity        String    @default("Toronto")
+  propertyPostalCode  String?
+  propertyWard        String?   // City of Toronto ward
+  propertyLegalDescription String? // Lot, plan, etc.
+  propertyType        String?   // Residential, Commercial, Industrial, Mixed-Use
+  
+  // ── Step 3: Business / Entity Details ──
+  businessName        String?   // Legal business name
+  businessTradeName   String?   // Operating / trade name (DBA)
+  businessType        String?   // Sole Proprietorship, Partnership, Corporation, Non-Profit
+  businessNumber      String?   // Ontario Business Number (BN / HST number)
+  incorporationNumber String?   // Corporation number if applicable
+  businessPhone       String?   // Main business phone
+  businessEmail       String?   // Business contact email
+  
+  // ── Step 4: Project / Work Scope ──
+  projectDescription  String?   // Detailed description of proposed work
+  projectPurpose      String?   // Purpose: New Construction, Renovation, Change of Use, etc.
+  projectStartDate    String?   // Intended start date
+  projectEndDate      String?   // Expected completion date
+  estimatedCost       String?   // Estimated total project cost ($)
+  squareFootage       String?   // Area of work in sq ft
+  numberOfStoreys     String?   // Number of storeys (building permits)
+  contractorName      String?   // Licensed contractor name
+  contractorPhone     String?   // Contractor contact
+  contractorLicense   String?   // Contractor licence number
+  architectEngineer   String?   // Architect / engineer name (if applicable)
+  
+  // ── Step 5: Additional / Compliance ──
+  zoningConfirmed     Boolean   @default(false) // Has applicant confirmed zoning compliance?
+  insuranceProvider   String?   // Liability insurance provider
+  insurancePolicyNumber String? // Policy number
+  previousPermitNumber String?  // Reference to prior related permit (if any)
+  additionalNotes     String?   // Free-form notes
+  
+  submittedAt     DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  // Relations
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permit          TorontoPermit @relation(fields: [permitId], references: [id])
+  
+  @@index([userId])
+  @@index([permitId])
+  @@index([status])
+  @@map("applications")
+}
+
+// Saved / bookmarked permits (not yet applied)
+model SavedPermit {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  permitId  Int
+  createdAt DateTime @default(now())
+
+  user   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permit TorontoPermit @relation(fields: [permitId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, permitId])
+  @@index([userId])
+  @@map("saved_permits")
 }

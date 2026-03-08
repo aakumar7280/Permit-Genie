@@ -127,6 +127,14 @@ export const permitsAPI = {
     return apiRequest(`/permits/search?${params}`);
   },
 
+  // Chat-based permit search (conversational)
+  chatPermits: async (messages, limit = 8) => {
+    return apiRequest('/permits/chat', {
+      method: 'POST',
+      body: JSON.stringify({ messages, limit }),
+    });
+  },
+
   // Get permit by ID
   getPermitById: async (id) => {
     return apiRequest(`/permits/${id}`);
@@ -141,6 +149,77 @@ export const permitsAPI = {
   getPermitCategories: async () => {
     return apiRequest('/permits/meta/categories');
   }
+};
+
+// Applications API
+export const applicationsAPI = {
+  // Get all applications for current user
+  getApplications: async () => {
+    return apiRequest('/applications');
+  },
+
+  // Get a single application
+  getApplication: async (id) => {
+    return apiRequest(`/applications/${id}`);
+  },
+
+  // Create a new application
+  createApplication: async (data) => {
+    return apiRequest('/applications', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Update a draft application
+  updateApplication: async (id, data) => {
+    return apiRequest(`/applications/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Submit a draft application
+  submitApplication: async (id) => {
+    return apiRequest(`/applications/${id}/submit`, {
+      method: 'POST',
+    });
+  },
+
+  // Delete a draft application
+  deleteApplication: async (id) => {
+    return apiRequest(`/applications/${id}`, {
+      method: 'DELETE',
+    });
+  },
+};
+
+// Saved Permits API
+export const savedPermitsAPI = {
+  // Get all saved permits for current user
+  getSavedPermits: async () => {
+    return apiRequest('/saved-permits');
+  },
+
+  // Save a permit
+  savePermit: async (permitId) => {
+    return apiRequest('/saved-permits', {
+      method: 'POST',
+      body: JSON.stringify({ permitId }),
+    });
+  },
+
+  // Unsave a permit
+  unsavePermit: async (permitId) => {
+    return apiRequest(`/saved-permits/${permitId}`, {
+      method: 'DELETE',
+    });
+  },
+
+  // Check if a permit is saved
+  isPermitSaved: async (permitId) => {
+    return apiRequest(`/saved-permits/check/${permitId}`);
+  },
 };
 
 // Default export for permits API
