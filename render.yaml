@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: permit-genie-api
+    runtime: node
+    plan: free
+    buildCommand: cd backend && npm install && npm run build && npm run seed
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromDatabase:
+          name: permit-genie-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+
+databases:
+  - name: permit-genie-db
+    plan: free
+    databaseName: permit_genie
