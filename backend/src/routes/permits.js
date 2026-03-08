@@ -134,6 +134,7 @@ router.post('/chat', async (req, res) => {
         success: true,
         message: `I found ${permits.length} permit${permits.length !== 1 ? 's' : ''} that might match what you're looking for. Feel free to give me more details so I can refine the suggestions!`,
         aiPowered: false,
+        aiError: aiError.message,
         permits: permits.map(permit => ({
           id: permit.id,
           csvId: permit.csvId,
